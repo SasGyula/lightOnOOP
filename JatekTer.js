@@ -9,10 +9,11 @@ export class JatekTer{
         this.#meret = 3
         this.#setAllapotLista()
         this.#init()
+        this.#ellenorzes()
     }
     #setAllapotLista(){
         for(let i = 0; i<this.#meret*this.#meret; i++){
-            if(Math.random < .2){
+            if(Math.random() < .2){
                 this.#allapotLista[i] = true
             }else{
                 this.#allapotLista[i] = false
@@ -23,7 +24,9 @@ export class JatekTer{
 
     }
     #init(){
+        
         const jatekter = $("#jatekter")
+        let elem = new Lampa(0, false, jatekter)
         jatekter.empty();
         for(let i = 0; i<this.#allapotLista.length; i++ ){
             let elem = new Lampa(i, this.#allapotLista[i], jatekter)
@@ -36,5 +39,8 @@ export class JatekTer{
                 this.#db++
             }
         }
-       }
+        const divElem = $(".maradt")
+        divElem.html(this.#db)
+    }
+    
 }
