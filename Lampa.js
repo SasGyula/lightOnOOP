@@ -1,33 +1,39 @@
 export class Lampa{
-    #allapot
+    #allapot // false azt jelenti hogy le van kapcsolva a true hogy fel
     #id
     #divElem
-    constructor(id, allapot, divElem){
+    #szuloElem
+
+    constructor(id, allapot, szuloElem){
         this.#id = id
         this.#allapot = allapot
-        this.#divElem = divElem
+        this.#szuloElem = szuloElem
         this.#megjelenit();
+        this.#divElem = this.#szuloElem.children("div:last-child")
+        this.#szinBeallit()
+        this.#divElem.on("click", ()=>{
+            this.#kattintasTrigger("kapcsolas")
+            this.setAllapot()
+        })
     }
     #megjelenit(){
-        let txt = ""
-        if(this.#allapot === true){
-            txt += `<div id="${this.#id}", class="gombok0"></div>`
-        }else if(this.#allapot === false){
-            txt += `<div id="${this.#id}", class="gombok1"></div>`
-        }
-        this.#divElem.append(txt)
+        let txt = "<div> </div>"
+        this.#szuloElem.append(txt)
     }
-    #setAllapot(){
-
-    }
-    #szomszedokKeresese(id){
-
+    setAllapot(){
+        this.#allapot = !this.#allapot
+        this.#szinBeallit()
     }
     #szinBeallit(){
-        
+        if(this.#allapot){
+            this.#divElem.addClass("felkapcs")
+        }else{
+            this.#divElem.removeClass("felkapcs")
+        }
     }
-    #kattintasTrigger(){
-        
+    #kattintasTrigger(esemenynev){
+        const e = new CustomEvent(esemenynev,{detail:this.#id})
+        window.dispatchEvent(e)
     }
 
 }

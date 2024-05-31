@@ -1,3 +1,4 @@
+import EredmenyMegjelenit from "./EredmenyMegjelenit.js"
 import { Lampa } from "./Lampa.js"
 export class JatekTer{
     #db
@@ -10,6 +11,11 @@ export class JatekTer{
         this.#setAllapotLista()
         this.#init()
         this.#ellenorzes()
+        $(window).on("kapcsolas",(event) =>{
+            console.log(event.detail)
+            let id = event.detail
+            this.#szomszedokKeresese(id)
+        })
     }
     #setAllapotLista(){
         for(let i = 0; i<this.#meret*this.#meret; i++){
@@ -21,17 +27,32 @@ export class JatekTer{
         }
     }
     #szomszedokKeresese(id){
-
+        if(id%3 !== 2){
+            this.#allapotLista[id+1] = !this.#allapotLista[id+1]
+        }
+        if(id%3 !== 0){
+            this.#allapotLista[id-1] = !this.#allapotLista[id-1]
+        }
+        if(id <6){
+            this.#allapotLista[id+3] = !this.#allapotLista[id+3]
+        }
+        if(id>3){
+            this.#allapotLista[id-3] = !this.#allapotLista[id-3]
+        }
+        
+        // szomszédok id-1 id+1 id+3 id-3
+        this.#init()
     }
     #init(){
-        
         const jatekter = $("#jatekter")
-        let elem = new Lampa(0, false, jatekter)
         jatekter.empty();
+        this.#ellenorzes()
         for(let i = 0; i<this.#allapotLista.length; i++ ){
             let elem = new Lampa(i, this.#allapotLista[i], jatekter)
             
         }
+        const divElem = $(".pontok")
+        new EredmenyMegjelenit(this.#db,divElem)
     }
     #ellenorzes(){
         for(let i = 0; i<this.#allapotLista.length; i++){
@@ -39,8 +60,6 @@ export class JatekTer{
                 this.#db++
             }
         }
-        const divElem = $(".maradt")
-        divElem.html(this.#db)
     }
     
 }
